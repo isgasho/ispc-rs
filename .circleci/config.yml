@@ -3,11 +3,15 @@ jobs:
   build:
     docker:
       - image: debian:stretch
+    filters:
+      branches:
+        only: circleci
     steps:
       - checkout
       - run:
-          name: Setup Dependencies
-          command: ./.circleci/setup-dependencies.sh
+          name: Setup System Dependencies
+          command: apt-get update && apt-get install gcc g++ make curl wget clang -y
       - run:
           name: Build ispc-rs
-          command: cargo build
+          command: ./.circleci/build-ispc-rs-linux.sh
+
